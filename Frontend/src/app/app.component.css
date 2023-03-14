@@ -2,16 +2,16 @@ div.game {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(6, 1fr);
-  width: 56vw;
-  height: 48vw;
-  padding-left: 22vw;
+  width: 35vw;
+  height: 30vw;
+  padding-left: 30vw;
   padding-top: 3vw;
 }
 
 .game-cell {
-  width: 8vw;
-  height: 8vw;
-  border: 0.5vw solid #777777;
+  width: 5vw;
+  height: 5vw;
+  border: 0.25vw solid #777777;
   box-sizing: border-box;
   background-color: #777777;
 }
@@ -22,8 +22,8 @@ div.game {
 }
 
 .dot {
-  height: 7vw;
-  width: 7vw;
+  height: 4.5vw;
+  width: 4.5vw;
   border-radius: 50%;
   display: inline-block;
   cursor: pointer;
@@ -43,16 +43,15 @@ div.game {
 
 .title {
   text-align: left;
-  padding-left: 27vw;
-  font-size: 5vw;
+  padding-left: 29vw;
+  font-size: 4vw;
   color: white;
 }
 
 .turn_indicator {
   text-align: left;
   padding-left: 38vw;
-  padding-bottom: 1vw;
-  font-size: 3vw;
+  font-size: 2.5vw;
   color: white;
 }
 
