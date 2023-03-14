@@ -1,0 +1,65 @@
+div.game {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  width: 56vw;
+  height: 48vw;
+  padding-left: 22vw;
+  padding-top: 3vw;
+}
+
+.game-cell {
+  width: 8vw;
+  height: 8vw;
+  border: 0.5vw solid #777777;
+  box-sizing: border-box;
+  background-color: #777777;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.dot {
+  height: 7vw;
+  width: 7vw;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.empty {
+    background-color: #333333;
+}
+
+.player1 {
+    background-color: #224488;
+}
+
+.player2 {
+    background-color: #882244;
+}
+
+.title {
+  text-align: left;
+  padding-left: 27vw;
+  font-size: 5vw;
+  color: white;
+}
+
+.turn_indicator {
+  text-align: left;
+  padding-left: 38vw;
+  padding-bottom: 1vw;
+  font-size: 3vw;
+  color: white;
+}
+
+.player1label {
+  color: #224488;
+}
+
+.player2label {
+  color: #882244;
+}
