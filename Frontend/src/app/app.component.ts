@@ -22,8 +22,10 @@ export class AppComponent {
            [0, 0, 0, 0, 0, 0, 0]]
 
   columnClicked(j: number) {
-    this.updateBoardState(j);
-    this.togglePlayer();
+    if(!this.isColumnFull(j)) {
+        this.updateBoardState(j);
+        this.togglePlayer();
+    }
   }
 
   private updateBoardState(column: number) {
@@ -59,4 +61,13 @@ export class AppComponent {
   OnMouseLeaveColumn() {
     this.mouseColumnPosition = -1;
   }
+
+  private isColumnFull(column: number) {
+    for(let i = 0; i < this.board[0].length ; i++) {
+      if(this.board[i][column] == 0)
+        return false
+    }
+    return true;
+  }
+
 }
