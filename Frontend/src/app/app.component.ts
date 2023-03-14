@@ -12,6 +12,8 @@ export class AppComponent {
   isGameEnded = false;
   winner = 0;
 
+  mouseColumnPosition = -1;
+
   board = [[0, 0, 0, 0, 0, 0, 0],
            [0, 0, 0, 0, 0, 0, 0],
            [0, 0, 0, 0, 0, 0, 0],
@@ -50,4 +52,11 @@ export class AppComponent {
     }
   }
 
+  onMouseOnColumn(j: number) {
+     this.mouseColumnPosition = j;
+  }
+
+  OnMouseLeaveColumn() {
+    this.mouseColumnPosition = -1;
+  }
 }

@@ -11,9 +11,9 @@ div.game {
 .game-cell {
   width: 5vw;
   height: 5vw;
-  border: 0.25vw solid #777777;
+  border: 0.25vw solid #333333;
   box-sizing: border-box;
-  background-color: #777777;
+  background-color: #333333;
 }
 
 * {
@@ -30,7 +30,7 @@ div.game {
 }
 
 .empty {
-    background-color: #333333;
+    background-color: white;
 }
 
 .player1 {
@@ -61,4 +61,12 @@ div.game {
 
 .player2label {
   color: #882244;
+}
+
+.columnHoverPlayer1 {
+  background-color: #B6C1D8
+}
+
+.columnHoverPlayer2 {
+  background-color: #D8B6C1
 }

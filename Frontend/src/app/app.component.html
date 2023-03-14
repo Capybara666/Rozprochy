@@ -8,9 +8,11 @@
     <div class = "game">
       <ng-container *ngFor="let item of [].constructor(6); let i = index">
         <div class="game-cell" *ngFor="let item of [].constructor(7); let j = index">
-        <div class="dot empty" *ngIf="board[i][j]==0" (click)="columnClicked(j)"></div>
-        <div class="dot player1" *ngIf="board[i][j]==1" (click)="columnClicked(j)"></div>
-        <div class="dot player2" *ngIf="board[i][j]==2" (click)="columnClicked(j)"></div>
+        <div class="dot empty" *ngIf="board[i][j]==0 && mouseColumnPosition!=j" (click)="columnClicked(j)" (mouseover)="onMouseOnColumn(j)"></div>
+        <div class="dot empty columnHoverPlayer1" *ngIf="board[i][j]==0 && mouseColumnPosition==j && currentPlayer==1" (click)="columnClicked(j)" (mouseover)="onMouseOnColumn(j)" (mouseleave)="OnMouseLeaveColumn()"></div>
+        <div class="dot empty columnHoverPlayer2" *ngIf="board[i][j]==0 && mouseColumnPosition==j && currentPlayer==2" (click)="columnClicked(j)" (mouseover)="onMouseOnColumn(j)" (mouseleave)="OnMouseLeaveColumn()"></div>
+        <div class="dot player1" *ngIf="board[i][j]==1" (click)="columnClicked(j)" (mouseover)="onMouseOnColumn(j)"></div>
+        <div class="dot player2" *ngIf="board[i][j]==2" (click)="columnClicked(j)" (mouseover)="onMouseOnColumn(j)"></div>
       </div>
       </ng-container>
     </div>
