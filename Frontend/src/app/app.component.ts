@@ -1,18 +1,26 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {WebsocketService} from "./services/websocket.service";
+import {GameStateResponseDto} from "./models/GameStateResponseDto";
+import {GameStateRequestedDto} from "./models/GameStateRequestedDto";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy{
   title = 'Frontend';
+  player = 1;
+
   currentPlayer = 1;
 
   isGameEnded = false;
   winner = 0;
 
   mouseColumnPosition = -1;
+
+  isInQueue = false;
+
 
   board = [[0, 0, 0, 0, 0, 0, 0],
            [0, 0, 0, 0, 0, 0, 0],
@@ -21,8 +29,30 @@ export class AppComponent {
            [0, 0, 0, 0, 0, 0, 0],
            [0, 0, 0, 0, 0, 0, 0]]
 
+  constructor(public websocketService: WebsocketService) { }
+
+  ngOnInit(): void {
+    this.websocketService.setOnResponseCommand(this.onResponse);
+    this.websocketService.openWebSocket();
+  }
+
+  ngOnDestroy(): void {
+    this.websocketService.closeWebSocket();
+  }
+
+  onResponse(gameStateResponseDto: GameStateResponseDto) {
+    this.board = gameStateResponseDto.board;
+    this.currentPlayer = this.player;
+    this.isGameEnded = gameStateResponseDto.gameEnded;
+    this.winner = gameStateResponseDto.winner;
+  }
+
+  sendMessage(gameStateRequestedDto: GameStateRequestedDto): void {
+    this.websocketService.sendMessage(gameStateRequestedDto);
+  }
+
   columnClicked(j: number) {
-    if(!this.isColumnFull(j)) {
+    if(!this.isColumnFull(j) && this.currentPlayer == this.player) {
         this.updateBoardState(j);
         this.togglePlayer();
     }
@@ -37,7 +67,7 @@ export class AppComponent {
 
     for (let i = clickedColumn.length-1; i >=0 ; i--) {
       if(clickedColumn[i] == 0) {
-        clickedColumn[i] = this.currentPlayer;
+        clickedColumn[i] = this.player;
         break;
       }
     }
@@ -52,6 +82,7 @@ export class AppComponent {
     else {
       this.currentPlayer = 1;
     }
+    this.sendMessage(new GameStateRequestedDto(this.player, this.board));
   }
 
   onMouseOnColumn(j: number) {

@@ -26,7 +26,10 @@ div.game {
   width: 4.5vw;
   border-radius: 50%;
   display: inline-block;
-  cursor: pointer;
+}
+
+.clickable {
+    cursor: pointer;
 }
 
 .empty {
@@ -70,3 +73,41 @@ div.game {
 .columnHoverPlayer2 {
   background-color: #D8B6C1
 }
+
+.queue {
+  padding-left: 34vw;
+  padding-top: 10vw;
+  font-size: 2.5vw;
+  color: white;
+}
+
+.loading.p {
+
+}
+
+.loading:after {
+  content: ' .';
+  animation: dots 1.5s steps(5, end) infinite;
+  font-size: 5vw;
+  padding-left: 14vw;
+}
+
+@keyframes dots {
+  0%, 20% {
+    color: rgba(0,0,0,0);
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);}
+  40% {
+    color: white;
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);}
+  60% {
+    text-shadow:
+      .25em 0 0 white,
+      .5em 0 0 rgba(0,0,0,0);}
+  80%, 100% {
+    text-shadow:
+      .25em 0 0 white,
+      .5em 0 0 white;}}
