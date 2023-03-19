@@ -16,7 +16,7 @@ export class WebsocketService {
   constructor() { }
 
   public openWebSocket(){
-    this.webSocket = new WebSocket('ws://');
+    this.webSocket = new WebSocket('wss://');
 
     this.webSocket.onopen = (event) => {
       console.log('Open: ', event);

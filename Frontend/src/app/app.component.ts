@@ -14,12 +14,12 @@ export class AppComponent implements OnInit, OnDestroy{
 
   currentPlayer = 1;
 
-  isGameEnded = false;
+  gameEnded = false;
   winner = 0;
 
   mouseColumnPosition = -1;
 
-  isInQueue = false;
+  inQueue = true;
 
 
   board = [[0, 0, 0, 0, 0, 0, 0],
@@ -43,7 +43,7 @@ export class AppComponent implements OnInit, OnDestroy{
   onResponse(gameStateResponseDto: GameStateResponseDto) {
     this.board = gameStateResponseDto.board;
     this.currentPlayer = this.player;
-    this.isGameEnded = gameStateResponseDto.gameEnded;
+    this.gameEnded = gameStateResponseDto.gameEnded;
     this.winner = gameStateResponseDto.winner;
   }
 
