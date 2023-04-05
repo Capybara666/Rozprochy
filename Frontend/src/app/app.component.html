@@ -1,6 +1,7 @@
-<div class = "game-container" *ngIf="!inQueue">
+<div class = "game-container" *ngIf="inQueue!=false">
   <div class="title">Four in a row game</div>
-  <div class="turn_indicator">Player
+  <div class="turn_indicator">
+    Player
     <label class="player1label" *ngIf="currentPlayer==1">blue</label>
     <label class="player2label" *ngIf="currentPlayer==2">red</label>
     turn
@@ -17,7 +18,7 @@
       </ng-container>
     </div>
 </div>
-<div class="queue" *ngIf="inQueue">
+<div class="queue" *ngIf="inQueue==true">
   Waiting for another player
   <p class="loading"></p>
 </div>

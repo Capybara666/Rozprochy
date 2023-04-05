@@ -10,7 +10,7 @@ import {GameStateRequestedDto} from "./models/GameStateRequestedDto";
 })
 export class AppComponent implements OnInit, OnDestroy{
   title = 'Frontend';
-  player = 1;
+  player = 0;
 
   currentPlayer = 1;
 
@@ -33,6 +33,7 @@ export class AppComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.websocketService.setOnResponseCommand(this.onResponse);
+    this.websocketService.setOnConnectCommand(this.onConnect);
     this.websocketService.openWebSocket();
   }
 
@@ -42,9 +43,14 @@ export class AppComponent implements OnInit, OnDestroy{
 
   onResponse(gameStateResponseDto: GameStateResponseDto) {
     this.board = gameStateResponseDto.board;
-    this.currentPlayer = this.player;
     this.gameEnded = gameStateResponseDto.gameEnded;
     this.winner = gameStateResponseDto.winner;
+    this.inQueue = false;
+    //this.togglePlayer();
+  }
+
+  onConnect(player: number) {
+    this.player = player;
   }
 
   sendMessage(gameStateRequestedDto: GameStateRequestedDto): void {
@@ -55,6 +61,7 @@ export class AppComponent implements OnInit, OnDestroy{
     if(!this.isColumnFull(j) && this.currentPlayer == this.player) {
         this.updateBoardState(j);
         this.togglePlayer();
+        this.sendMessage(new GameStateRequestedDto(this.player, this.board));
     }
   }
 
@@ -75,6 +82,7 @@ export class AppComponent implements OnInit, OnDestroy{
       this.board[i][column] = clickedColumn[i];
     }
   }
+
   private togglePlayer() {
     if(this.currentPlayer == 1) {
       this.currentPlayer = 2;
@@ -82,7 +90,6 @@ export class AppComponent implements OnInit, OnDestroy{
     else {
       this.currentPlayer = 1;
     }
-    this.sendMessage(new GameStateRequestedDto(this.player, this.board));
   }
 
   onMouseOnColumn(j: number) {
