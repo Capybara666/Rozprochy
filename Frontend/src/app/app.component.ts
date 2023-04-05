@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, NgZone} from '@angular/core';
 import {WebsocketService} from "./services/websocket.service";
 import {GameStateResponseDto} from "./models/GameStateResponseDto";
 import {GameStateRequestedDto} from "./models/GameStateRequestedDto";
@@ -11,14 +11,10 @@ import {GameStateRequestedDto} from "./models/GameStateRequestedDto";
 export class AppComponent implements OnInit, OnDestroy{
   title = 'Frontend';
   player = 0;
-
   currentPlayer = 1;
-
   gameEnded = false;
   winner = 0;
-
   mouseColumnPosition = -1;
-
   inQueue = true;
 
 
@@ -29,7 +25,7 @@ export class AppComponent implements OnInit, OnDestroy{
            [0, 0, 0, 0, 0, 0, 0],
            [0, 0, 0, 0, 0, 0, 0]]
 
-  constructor(public websocketService: WebsocketService) { }
+  constructor(public websocketService: WebsocketService, private zone:NgZone) { }
 
   ngOnInit(): void {
     this.websocketService.setOnResponseCommand(this.onResponse);
@@ -42,15 +38,19 @@ export class AppComponent implements OnInit, OnDestroy{
   }
 
   onResponse(gameStateResponseDto: GameStateResponseDto) {
-    this.board = gameStateResponseDto.board;
-    this.gameEnded = gameStateResponseDto.gameEnded;
-    this.winner = gameStateResponseDto.winner;
-    this.inQueue = false;
-    //this.togglePlayer();
+    this.zone.run(() => {
+      this.board = gameStateResponseDto.board;
+      this.gameEnded = gameStateResponseDto.gameEnded;
+      this.winner = gameStateResponseDto.winner;
+      this.inQueue = false;
+      this.togglePlayer();
+    })
   }
 
   onConnect(player: number) {
-    this.player = player;
+    this.zone.run(() => {
+      this.player = player;
+    })
   }
 
   sendMessage(gameStateRequestedDto: GameStateRequestedDto): void {
