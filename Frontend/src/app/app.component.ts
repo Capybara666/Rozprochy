@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {WebsocketService} from "./services/websocket.service";
 import {GameStateResponseDto} from "./models/GameStateResponseDto";
 import {GameStateRequestedDto} from "./models/GameStateRequestedDto";
