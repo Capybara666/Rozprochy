@@ -1,6 +1,6 @@
 <div class = "game-container" *ngIf="inQueue==false">
   <div class="title">Four in a row game</div>
-  <div class="turn_indicator">
+  <div class="turn_indicator" *ngIf="gameEnded==false">
     Player
     <label class="player1label" *ngIf="currentPlayer==1">blue</label>
     <label class="player2label" *ngIf="currentPlayer==2">red</label>
@@ -11,6 +11,11 @@
       <label class="player2label" *ngIf="winner==2">red</label>
       won!
     </div>
+  </div>
+  <div class="turn_indicator" *ngIf="gameEnded==true">
+    <label class="player1label" *ngIf="winner==1">blue won!</label>
+    <label class="player2label" *ngIf="winner==2">red won!</label>
+    <label *ngIf="winner==0">draw!</label>
   </div>
     <div class = "game">
       <ng-container *ngFor="let item of [].constructor(6); let i = index">
