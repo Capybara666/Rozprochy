@@ -36,7 +36,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 self.group_name,
                 {   
                     "type": "game_info",
-                    "gameState": gameState,
+                    "board": gameState,
                     "winner" : winner,
                     "gameEnded": False
                 }
@@ -52,16 +52,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
 
-        if "gameState" in text_data_json:  # sending game info to both players
-            gameState = text_data_json["gameState"]
-            winner = checkGameState(gameState)
-            gameEnded = isBoardFull(gameState)
+        if "board" in text_data_json:  # sending game info to both players
+            board = text_data_json["board"]
+            winner = checkGameState(board)
+            gameEnded = isBoardFull(board) or winner != 0
             # Send message to room group
             await self.channel_layer.group_send(
                 self.group_name,
                 {   
                     "type": "game_info",
-                    "gameState": gameState,
+                    "board": board,
                     "winner" : winner,
                     "gameEnded": gameEnded
                 }

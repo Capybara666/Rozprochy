@@ -58,6 +58,13 @@ div.game {
   color: white;
 }
 
+.end-message {
+  text-align: left;
+  padding-left: 38vw;
+  font-size: 2.5vw;
+  color: white;
+}
+
 .player1label {
   color: #224488;
 }

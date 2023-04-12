@@ -1,7 +1,9 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit, NgZone} from '@angular/core';
+import {Component, OnDestroy, OnInit, NgZone} from '@angular/core';
 import {WebsocketService} from "./services/websocket.service";
 import {GameStateResponseDto} from "./models/GameStateResponseDto";
 import {GameStateRequestedDto} from "./models/GameStateRequestedDto";
+import {ConnectionDataRequestedDto} from "./models/ConnectionDataRequestedDto";
+
 
 @Component({
   selector: 'app-root',
@@ -25,42 +27,32 @@ export class AppComponent implements OnInit, OnDestroy{
            [0, 0, 0, 0, 0, 0, 0],
            [0, 0, 0, 0, 0, 0, 0]]
 
-  constructor(public websocketService: WebsocketService, private zone:NgZone) { }
+  constructor() {    
+    this.connectionDataRequestedDto = new ConnectionDataRequestedDto("", 0, "");
+    this.board = [[0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0]]
+  
+  }
 
   ngOnInit(): void {
-    this.websocketService.setOnResponseCommand(this.onResponse);
-    this.websocketService.setOnConnectCommand(this.onConnect);
-    this.websocketService.openWebSocket();
+    this.openWebSocket();
   }
 
   ngOnDestroy(): void {
-    this.websocketService.closeWebSocket();
-  }
-
-  onResponse(gameStateResponseDto: GameStateResponseDto) {
-    this.zone.run(() => {
-      this.board = gameStateResponseDto.board;
-      this.gameEnded = gameStateResponseDto.gameEnded;
-      this.winner = gameStateResponseDto.winner;
-      this.inQueue = false;
-      this.togglePlayer();
-    })
-  }
-
-  onConnect(player: number) {
-    this.zone.run(() => {
-      this.player = player;
-    })
+    this.closeWebSocket();
   }
 
   sendMessage(gameStateRequestedDto: GameStateRequestedDto): void {
-    this.websocketService.sendMessage(gameStateRequestedDto);
+    this.sendMessageToServer(gameStateRequestedDto);
   }
 
   columnClicked(j: number) {
-    if(!this.isColumnFull(j) && this.currentPlayer == this.player) {
+    if(!this.isColumnFull(j) && this.currentPlayer == this.player && !this.gameEnded) {
         this.updateBoardState(j);
-        this.togglePlayer();
         this.sendMessage(new GameStateRequestedDto(this.player, this.board));
     }
   }
@@ -106,6 +98,62 @@ export class AppComponent implements OnInit, OnDestroy{
         return false
     }
     return true;
+  }
+
+  // @ts-ignore
+  webSocket: WebSocket;
+  // @ts-ignore
+  gameStateResponseDto: GameStateResponseDto;
+
+  connectionDataRequestedDto: ConnectionDataRequestedDto;
+
+  connectionID: string = "";
+
+  connected: boolean = false;
+
+  public openWebSocket(){
+    this.webSocket = new WebSocket('ws://127.0.0.1:8000/ws/realBackend/game/');
+
+    this.webSocket.onopen = (event) => {
+      console.log('Open: ', event);
+    };
+
+    this.webSocket.onmessage = (event) => {
+      if(this.connected) {
+        this.gameStateResponseDto = JSON.parse(event.data);
+        console.log("Received game data:");
+        console.log(this.gameStateResponseDto);
+        this.board = this.gameStateResponseDto.board;
+        this.gameEnded = this.gameStateResponseDto.gameEnded;
+        this.winner = this.gameStateResponseDto.winner;
+        this.inQueue = false;
+        console.log(this.gameEnded)
+        this.togglePlayer();      
+      }
+      else {
+        this.connectionDataRequestedDto = JSON.parse(event.data);
+        console.log("Received connection data:");
+        console.log(this.connectionDataRequestedDto);
+        this.connectionID = this.connectionDataRequestedDto.ID;
+        this.connected = true;
+        this.player = this.connectionDataRequestedDto.number;
+      }
+    };
+
+    this.webSocket.onclose = (event) => {
+      console.log('Close: ', event);
+    };
+  }
+
+  public sendMessageToServer(gameStateRequestedDto: GameStateRequestedDto){
+    gameStateRequestedDto.setID(this.connectionID);
+    console.log("Sending data:");
+    console.log(gameStateRequestedDto);
+    this.webSocket.send(JSON.stringify(gameStateRequestedDto));
+  }
+
+  public closeWebSocket() {
+    this.webSocket.close();
   }
 
 }

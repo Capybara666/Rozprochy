@@ -9,9 +9,9 @@ def checkColumns(gameState):
                 if gameState[row + index][col] == 0:
                     break
                 elif gameState[row + index][col] == 1:
-                    conter1 += 1
+                    counter1 += 1
                 else:
-                    conter2 += 1
+                    counter2 += 1
             
             if counter1 == 4:
                 return 1
@@ -92,7 +92,7 @@ def checkAntiDiagonals(gameState):
 
 def checkGameState(gameState):
 
-    table = gameState["gamestate"]
+    table = gameState
 
     winner = checkColumns(table)
     if winner != 0:
