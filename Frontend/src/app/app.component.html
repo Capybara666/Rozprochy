@@ -5,12 +5,6 @@
     <label class="player1label" *ngIf="currentPlayer==1">blue</label>
     <label class="player2label" *ngIf="currentPlayer==2">red</label>
     turn
-    <div class = "end-message" *ngIf="gameEnded==true">
-      Player
-      <label class="player1label" *ngIf="winner==1">blue</label>
-      <label class="player2label" *ngIf="winner==2">red</label>
-      won!
-    </div>
   </div>
   <div class="turn_indicator" *ngIf="gameEnded==true">
     <label class="player1label" *ngIf="winner==1">blue won!</label>
